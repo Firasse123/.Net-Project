@@ -1,69 +1,216 @@
 ﻿@{
-    ViewData["Title"] = "Employees";
+    ViewData["Title"] = "Dashboard";
 }
 
-<!-- Small boxes (Stat box) -->
+<!-- Statistics Cards -->
 <div class="row">
     <div class="col-lg-3 col-6">
-        <!-- small box -->
+        <!-- Total Employees -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>150</h3>
-
-                <p>New Orders</p>
+                <h3>@ViewBag.TotalEmployees</h3>
+                <p>Active Employees</p>
             </div>
             <div class="icon">
-                <i class="ion ion-bag"></i>
+                <i class="fas fa-users"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="/Employees" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-    <!-- ./col -->
+
     <div class="col-lg-3 col-6">
-        <!-- small box -->
+        <!-- Open Positions -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                <p>Bounce Rate</p>
+                <h3>@ViewBag.TotalOpenPositions</h3>
+                <p>Open Positions</p>
             </div>
             <div class="icon">
-                <i class="ion ion-stats-bars"></i>
+                <i class="fas fa-briefcase"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="/JobOpenings" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-    <!-- ./col -->
+
     <div class="col-lg-3 col-6">
-        <!-- small box -->
+        <!-- Pending Candidates -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>44</h3>
-
-                <p>User Registrations</p>
+                <h3>@ViewBag.PendingCandidates</h3>
+                <p>Pending Candidates</p>
             </div>
             <div class="icon">
-                <i class="ion ion-person-add"></i>
+                <i class="fas fa-user-clock"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="/Candidates" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-    <!-- ./col -->
+
     <div class="col-lg-3 col-6">
-        <!-- small box -->
+        <!-- Monthly Payroll -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>65</h3>
-
-                <p>Unique Visitors</p>
+                <h3>@ViewBag.MonthlyPayroll.ToString("C0")</h3>
+                <p>Monthly Payroll</p>
             </div>
             <div class="icon">
-                <i class="ion ion-pie-graph"></i>
+                <i class="fas fa-dollar-sign"></i>
             </div>
-            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            <a href="/Salaries" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-    <!-- ./col -->
 </div>
-<!-- /.row -->
+
+<!-- Second Row Statistics -->
+<div class="row">
+    <div class="col-lg-6 col-6">
+        <!-- Equipment Stats -->
+        <div class="info-box bg-gradient-info">
+            <span class="info-box-icon"><i class="fas fa-laptop"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Total Equipment</span>
+                <span class="info-box-number">@ViewBag.TotalEquipment</span>
+                <div class="progress">
+                    <div class="progress-bar" style="width: @(ViewBag.TotalEquipment > 0 ? ((decimal)ViewBag.AssignedEquipment / ViewBag.TotalEquipment * 100) : 0)%"></div>
+                </div>
+                <span class="progress-description">
+                    @ViewBag.AssignedEquipment Assigned
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-6">
+        <!-- Quick Actions -->
+        <div class="info-box bg-gradient-success">
+            <span class="info-box-icon"><i class="fas fa-plus"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text">Quick Actions</span>
+                <div class="mt-2">
+                    <a href="/Employees/Create" class="btn btn-sm btn-light mr-1"><i class="fas fa-user-plus"></i> Add Employee</a>
+                    <a href="/JobOpenings/Create" class="btn btn-sm btn-light mr-1"><i class="fas fa-briefcase"></i> Post Job</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activities -->
+<div class="row">
+    <!-- Recent Hires -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header border-transparent">
+                <h3 class="card-title">Recent Hires (Last 30 Days)</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Department</th>
+                                <th>Hire Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.RecentHires != null && ViewBag.RecentHires.Count > 0)
+                            {
+                                @foreach (var employee in ViewBag.RecentHires)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="/Employees/Details/@employee.Id">@employee.FullName</a>
+                                        </td>
+                                        <td>@employee.Department</td>
+                                        <td>
+                                            <span class="badge badge-success">@employee.HireDate?.ToString("MMM dd, yyyy")</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">No recent hires</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <a href="/Employees" class="btn btn-sm btn-info float-right">View All Employees</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Candidates -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header border-transparent">
+                <h3 class="card-title">Recent Candidates</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table m-0">
+                        <thead>
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Position</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.RecentCandidates != null && ViewBag.RecentCandidates.Count > 0)
+                            {
+                                @foreach (var candidate in ViewBag.RecentCandidates)
+                                {
+                                    var badgeClass = candidate.Status switch
+                                    {
+                                        EmployeesManagement.Models.CandidateStatus.Applied => "badge-info",
+                                        EmployeesManagement.Models.CandidateStatus.UnderReview => "badge-warning",
+                                        EmployeesManagement.Models.CandidateStatus.Interviewed => "badge-primary",
+                                        EmployeesManagement.Models.CandidateStatus.Offered => "badge-success",
+                                        EmployeesManagement.Models.CandidateStatus.Hired => "badge-success",
+                                        EmployeesManagement.Models.CandidateStatus.Rejected => "badge-danger",
+                                        _ => "badge-secondary"
+                                    };
+                                    <tr>
+                                        <td>
+                                            <a href="/Candidates/Details/@candidate.Id">@candidate.FullName</a>
+                                        </td>
+                                        <td>@candidate.JobOpening?.JobTitle</td>
+                                        <td>
+                                            <span class="badge @badgeClass">@candidate.Status</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted">No recent candidates</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <a href="/Candidates" class="btn btn-sm btn-secondary float-right">View All Candidates</a>
+            </div>
+        </div>
+    </div>
+</div>
 

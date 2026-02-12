@@ -1,0 +1,121 @@
+@model EmployeesManagement.Models.Equipment
+
+@{
+    ViewData["Title"] = "Equipment Details";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Equipment Details</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@Model.Name</h3>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Name)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Name)</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Type)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Type)</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.SerialNumber)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.SerialNumber)</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Description)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PurchasePrice)</dt>
+                            <dd class="col-sm-8">@(Model.PurchasePrice?.ToString("C") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PurchaseDate)</dt>
+                            <dd class="col-sm-8">@(Model.PurchaseDate?.ToString("dd/MM/yyyy") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Status)</dt>
+                            <dd class="col-sm-8">
+                                @switch (Model.Status)
+                                {
+                                    case EmployeesManagement.Models.EquipmentStatus.Available:
+                                        <span class="badge badge-success">Available</span>
+                                        break;
+                                    case EmployeesManagement.Models.EquipmentStatus.Assigned:
+                                        <span class="badge badge-info">Assigned</span>
+                                        break;
+                                    case EmployeesManagement.Models.EquipmentStatus.UnderMaintenance:
+                                        <span class="badge badge-warning">Under Maintenance</span>
+                                        break;
+                                    case EmployeesManagement.Models.EquipmentStatus.Retired:
+                                        <span class="badge badge-secondary">Retired</span>
+                                        break;
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-4">Assigned To</dt>
+                            <dd class="col-sm-8">@(Model.AssignedToEmployee?.FullName ?? "Not Assigned")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.AssignmentDate)</dt>
+                            <dd class="col-sm-8">@(Model.AssignmentDate?.ToString("dd/MM/yyyy") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.ReturnDate)</dt>
+                            <dd class="col-sm-8">@(Model.ReturnDate?.ToString("dd/MM/yyyy") ?? "N/A")</dd>
+
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.WarrantyExpiry)</dt>
+                            <dd class="col-sm-8">@(Model.WarrantyExpiry?.ToString("dd/MM/yyyy") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Notes)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Notes)</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        @if (Model.Status == EmployeesManagement.Models.EquipmentStatus.Available)
+                        {
+                            <a asp-action="Assign" asp-route-id="@Model.Id" class="btn btn-primary">Assign</a>
+                            <form asp-action="StartMaintenance" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-secondary" onclick="return confirm('Send this equipment to maintenance?')">Maintenance</button>
+                            </form>
+                        }
+                        else if (Model.Status == EmployeesManagement.Models.EquipmentStatus.Assigned)
+                        {
+                            <form asp-action="Return" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-success" onclick="return confirm('Mark as returned?')">Return</button>
+                            </form>
+                            <form asp-action="StartMaintenance" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-secondary" onclick="return confirm('Send this equipment to maintenance?')">Maintenance</button>
+                            </form>
+                        }
+                        else if (Model.Status == EmployeesManagement.Models.EquipmentStatus.UnderMaintenance)
+                        {
+                            <form asp-action="CompleteMaintenance" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-success" onclick="return confirm('Mark maintenance as complete?')">Complete Maintenance</button>
+                            </form>
+                        }
+                        @if (Model.Status != EmployeesManagement.Models.EquipmentStatus.Retired)
+                        {
+                            <form asp-action="Retire" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Retire this equipment?')">Retire</button>
+                            </form>
+                        }
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Index" class="btn btn-default">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

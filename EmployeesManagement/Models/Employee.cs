@@ -30,5 +30,11 @@ namespace EmployeesManagement.Models
 
         public string? ProfilePicture { get; set; }
         public EmployeeStatus Status { get; set; }
+
+        public DateTime? HireDate { get; set; }
+        public DateTime? TerminationDate { get; set; }
+
+        public int? ManagerId { get; set; }
+        public Employee? Manager { get; set; }
     }
 }

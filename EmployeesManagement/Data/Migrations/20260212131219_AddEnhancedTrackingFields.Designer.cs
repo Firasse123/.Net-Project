@@ -4,6 +4,7 @@ using EmployeesManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeesManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260212131219_AddEnhancedTrackingFields")]
+    partial class AddEnhancedTrackingFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -363,12 +366,6 @@ namespace EmployeesManagement.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApprovedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ApprovedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<decimal>("BasicSalary")
                         .HasColumnType("decimal(18,2)");
 
@@ -406,12 +403,6 @@ namespace EmployeesManagement.Data.Migrations
                     b.Property<string>("PaymentFrequency")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RejectionReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<decimal?>("TransportAllowance")
                         .HasColumnType("decimal(18,2)");
@@ -686,7 +677,7 @@ namespace EmployeesManagement.Data.Migrations
             modelBuilder.Entity("EmployeesManagement.Models.Candidate", b =>
                 {
                     b.HasOne("EmployeesManagement.Models.JobOpening", "JobOpening")
-                        .WithMany("Candidates")
+                        .WithMany()
                         .HasForeignKey("JobOpeningId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -783,11 +774,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.JobOpening", b =>
-                {
-                    b.Navigation("Candidates");
                 });
 #pragma warning restore 612, 618
         }

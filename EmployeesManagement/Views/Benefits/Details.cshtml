@@ -1,0 +1,87 @@
+@model EmployeesManagement.Models.Benefit
+
+@{
+    ViewData["Title"] = "Benefit Details";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Benefit Details</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@Model.BenefitName</h3>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">Employee</dt>
+                            <dd class="col-sm-8">@Model.Employee?.FullName</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.BenefitName)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.BenefitName)</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Type)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Type)</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Description)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Description)</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Value)</dt>
+                            <dd class="col-sm-8">@(Model.Value?.ToString("C") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.StartDate)</dt>
+                            <dd class="col-sm-8">@Model.StartDate.ToString("dd/MM/yyyy")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.EndDate)</dt>
+                            <dd class="col-sm-8">@(Model.EndDate?.ToString("dd/MM/yyyy") ?? "Ongoing")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.IsActive)</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.IsActive)
+                                {
+                                    <span class="badge badge-success">Active</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-secondary">Inactive</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        @if (Model.IsActive)
+                        {
+                            <form asp-action="Deactivate" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-secondary" onclick="return confirm('Deactivate this benefit?')">
+                                    Deactivate
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="Activate" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-success" onclick="return confirm('Activate this benefit?')">
+                                    Activate
+                                </button>
+                            </form>
+                        }
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Index" class="btn btn-default">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

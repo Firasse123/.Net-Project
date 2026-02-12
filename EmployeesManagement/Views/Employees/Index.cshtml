@@ -1,77 +1,121 @@
 ﻿@model IEnumerable<EmployeesManagement.Models.Employee>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Employees";
 }
 
-<h1>Employees List</h1>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Employees List</h3>
+        <div class="card-tools">
+            <a href="/Employees/Create" class="btn btn-primary btn-sm">
+                <i class="fas fa-user-plus"></i> Add Employee
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <!-- Filters -->
+        <form method="get" class="mb-3">
+            <div class="row">
+                <div class="col-md-3">
+                    <input type="text" name="searchString" value="@ViewBag.CurrentSearch" class="form-control" placeholder="Search by name, email, or ID...">
+                </div>
+                <div class="col-md-2">
+                    <select name="status" class="form-control">
+                        <option value="">All Status</option>
+                        <option value="Active" selected="@(ViewBag.CurrentStatus == "Active")">Active</option>
+                        <option value="OnLeave" selected="@(ViewBag.CurrentStatus == "OnLeave")">On Leave</option>
+                        <option value="Terminated" selected="@(ViewBag.CurrentStatus == "Terminated")">Terminated</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select name="department" class="form-control">
+                        <option value="">All Departments</option>
+                        @if (ViewBag.Departments != null)
+                        {
+                            @foreach (var dept in (List<string>)ViewBag.Departments)
+                            {
+                                <option value="@dept" selected="@(ViewBag.CurrentDepartment == dept)">@dept</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-info"><i class="fas fa-search"></i> Filter</button>
+                    <a href="/Employees" class="btn btn-secondary"><i class="fas fa-redo"></i></a>
+                </div>
+            </div>
+        </form>
 
-<p>
-    <a asp-action="Create">Add a New Employee</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.EmpNo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MiddleName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LastName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PhoneNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EmailAddress)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Country)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateOfBirth)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmpNo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MiddleName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EmailAddress)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfBirth)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Employee No</th>
+                        <th>Full Name</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @if (!string.IsNullOrEmpty(item.ProfilePicture))
+                                    {
+                                        <img src="@item.ProfilePicture" class="img-circle" width="40" height="40" alt="Profile">
+                                    }
+                                    else
+                                    {
+                                        <img src="/AdminLTE/dist/img/user2-160x160.jpg" class="img-circle" width="40" height="40" alt="Profile">
+                                    }
+                                </td>
+                                <td>@item.EmpNo</td>
+                                <td>
+                                    <a href="/Employees/Profile/@item.Id"><strong>@item.FullName</strong></a>
+                                </td>
+                                <td>@item.Department</td>
+                                <td>@item.Designation</td>
+                                <td>@item.EmailAddress</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>
+                                    <span class="badge @(item.Status == EmployeesManagement.Models.EmployeeStatus.Active ? "badge-success" : item.Status == EmployeesManagement.Models.EmployeeStatus.OnLeave ? "badge-warning" : "badge-danger")">
+                                        @item.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a href="/Employees/Profile/@item.Id" class="btn btn-info btn-sm" title="Profile">
+                                            <i class="fas fa-user"></i>
+                                        </a>
+                                        <a href="/Employees/Edit/@item.Id" class="btn btn-primary btn-sm" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="/Employees/Delete/@item.Id" class="btn btn-danger btn-sm" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted">No employees found</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,134 @@
+@model EmployeesManagement.Models.Equipment
+
+@{
+    ViewData["Title"] = "Edit Equipment";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Edit Equipment</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Equipment Information</h3>
+                    </div>
+                    <form asp-action="Edit">
+                        <div class="card-body">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="CreatedById" />
+                            <input type="hidden" asp-for="CreatedOn" />
+                            
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label asp-for="Name"></label>
+                                        <input asp-for="Name" class="form-control" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label asp-for="Type"></label>
+                                        <select asp-for="Type" class="form-control" asp-items="Html.GetEnumSelectList<EmployeesManagement.Models.EquipmentType>()"></select>
+                                        <span asp-validation-for="Type" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="SerialNumber"></label>
+                                        <input asp-for="SerialNumber" class="form-control" />
+                                        <span asp-validation-for="SerialNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="Status"></label>
+                                        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<EmployeesManagement.Models.EquipmentStatus>()"></select>
+                                        <span asp-validation-for="Status" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PurchasePrice"></label>
+                                        <input asp-for="PurchasePrice" class="form-control" type="number" step="0.01" />
+                                        <span asp-validation-for="PurchasePrice" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="PurchaseDate"></label>
+                                        <input asp-for="PurchaseDate" class="form-control" type="date" />
+                                        <span asp-validation-for="PurchaseDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label asp-for="AssignedToEmployeeId">Assign To Employee</label>
+                                <select asp-for="AssignedToEmployeeId" class="form-control" asp-items="ViewBag.AssignedToEmployeeId">
+                                    <option value="">-- Not Assigned --</option>
+                                </select>
+                                <span asp-validation-for="AssignedToEmployeeId" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="AssignmentDate"></label>
+                                        <input asp-for="AssignmentDate" class="form-control" type="date" />
+                                        <span asp-validation-for="AssignmentDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="ReturnDate"></label>
+                                        <input asp-for="ReturnDate" class="form-control" type="date" />
+                                        <span asp-validation-for="ReturnDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label asp-for="Notes"></label>
+                                <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
+                                <span asp-validation-for="Notes" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-warning">Update</button>
+                            <a asp-action="Index" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

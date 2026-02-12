@@ -1,0 +1,255 @@
+@model EmployeesManagement.Models.JobOpening
+
+@{
+    ViewData["Title"] = "Job Opening Details";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Job Opening Details</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Index">Job Openings</a></li>
+                    <li class="breadcrumb-item active">Details</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@Model.JobTitle</h3>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.JobTitle)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.JobTitle)</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Department)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.Department)</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Location)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.Location)</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Requirements)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.Requirements)</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.NumberOfPositions)</dt>
+                            <dd class="col-sm-9">@Html.DisplayFor(model => model.NumberOfPositions)</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalaryRangeMin)</dt>
+                            <dd class="col-sm-9">@(Model.SalaryRangeMin?.ToString("C") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SalaryRangeMax)</dt>
+                            <dd class="col-sm-9">@(Model.SalaryRangeMax?.ToString("C") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PostedDate)</dt>
+                            <dd class="col-sm-9">@Model.PostedDate.ToString("dd/MM/yyyy")</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ClosingDate)</dt>
+                            <dd class="col-sm-9">@(Model.ClosingDate?.ToString("dd/MM/yyyy") ?? "Open Ended")</dd>
+                            
+                            <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Status)</dt>
+                            <dd class="col-sm-9">
+                                @if (Model.Status == EmployeesManagement.Models.JobStatus.Open)
+                                {
+                                    <span class="badge badge-success">Open</span>
+                                }
+                                else if (Model.Status == EmployeesManagement.Models.JobStatus.Closed)
+                                {
+                                    <span class="badge badge-danger">Closed</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning">On Hold</span>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        @if (Model.Status == EmployeesManagement.Models.JobStatus.Open)
+                        {
+                            <form asp-action="ClosePosition" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Close this job opening? No more applications will be accepted.')">
+                                    <i class="fas fa-lock"></i> Close Position
+                                </button>
+                            </form>
+                        }
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <a asp-action="Index" class="btn btn-default">
+                            <i class="fas fa-list"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Candidate Statistics -->
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Candidate Statistics</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-6">
+                                <div class="small-box bg-info">
+                                    <div class="inner">
+                                        <h3>@ViewBag.TotalCandidates</h3>
+                                        <p>Total Applications</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <div class="small-box bg-warning">
+                                    <div class="inner">
+                                        <h3>@ViewBag.PendingCandidates</h3>
+                                        <p>Pending Review</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <div class="small-box bg-primary">
+                                    <div class="inner">
+                                        <h3>@ViewBag.InterviewedCandidates</h3>
+                                        <p>Interviewed</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <div class="small-box bg-success">
+                                    <div class="inner">
+                                        <h3>@ViewBag.HiredCandidates</h3>
+                                        <p>Hired</p>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-user-check"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Candidates List -->
+        @if (ViewBag.Candidates != null && ((IEnumerable<EmployeesManagement.Models.Candidate>)ViewBag.Candidates).Any())
+        {
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Candidates for this Position</h3>
+                            <div class="card-tools">
+                                <a asp-controller="Candidates" asp-action="Create" asp-route-jobOpeningId="@Model.Id" class="btn btn-success btn-sm">
+                                    <i class="fas fa-plus"></i> Add Candidate
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Application Date</th>
+                                        <th>Interview Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var candidate in (IEnumerable<EmployeesManagement.Models.Candidate>)ViewBag.Candidates)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a asp-controller="Candidates" asp-action="Details" asp-route-id="@candidate.Id">
+                                                    @candidate.FullName
+                                                </a>
+                                            </td>
+                                            <td>@candidate.Email</td>
+                                            <td>@candidate.Phone</td>
+                                            <td>@candidate.ApplicationDate.ToString("dd/MM/yyyy")</td>
+                                            <td>@(candidate.InterviewDate?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                            <td>
+                                                @switch (candidate.Status)
+                                                {
+                                                    case EmployeesManagement.Models.CandidateStatus.Applied:
+                                                        <span class="badge badge-info">Applied</span>
+                                                        break;
+                                                    case EmployeesManagement.Models.CandidateStatus.UnderReview:
+                                                        <span class="badge badge-warning">Under Review</span>
+                                                        break;
+                                                    case EmployeesManagement.Models.CandidateStatus.Interviewed:
+                                                        <span class="badge badge-primary">Interviewed</span>
+                                                        break;
+                                                    case EmployeesManagement.Models.CandidateStatus.Offered:
+                                                        <span class="badge badge-success">Offered</span>
+                                                        break;
+                                                    case EmployeesManagement.Models.CandidateStatus.Hired:
+                                                        <span class="badge badge-success">Hired</span>
+                                                        break;
+                                                    case EmployeesManagement.Models.CandidateStatus.Rejected:
+                                                        <span class="badge badge-danger">Rejected</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>
+                                                <a asp-controller="Candidates" asp-action="Details" asp-route-id="@candidate.Id" class="btn btn-info btn-xs">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="text-center text-muted">No candidates have applied for this position yet.</p>
+                            <p class="text-center">
+                                <a asp-controller="Candidates" asp-action="Create" asp-route-jobOpeningId="@Model.Id" class="btn btn-success">
+                                    <i class="fas fa-plus"></i> Add First Candidate
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+</section>

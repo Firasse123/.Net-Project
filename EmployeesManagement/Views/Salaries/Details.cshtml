@@ -1,0 +1,106 @@
+@model EmployeesManagement.Models.Salary
+
+@{
+    ViewData["Title"] = "Salary Details";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Salary Details</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">@Model.Employee?.FullName - Salary Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">Employee</dt>
+                            <dd class="col-sm-8">@Model.Employee?.FullName</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.BasicSalary)</dt>
+                            <dd class="col-sm-8">@Model.BasicSalary.ToString("C")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.HousingAllowance)</dt>
+                            <dd class="col-sm-8">@(Model.HousingAllowance?.ToString("C") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.TransportAllowance)</dt>
+                            <dd class="col-sm-8">@(Model.TransportAllowance?.ToString("C") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.MedicalAllowance)</dt>
+                            <dd class="col-sm-8">@(Model.MedicalAllowance?.ToString("C") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.OtherAllowances)</dt>
+                            <dd class="col-sm-8">@(Model.OtherAllowances?.ToString("C") ?? "N/A")</dd>
+                            
+                            <dt class="col-sm-4"><strong>Total Salary</strong></dt>
+                            <dd class="col-sm-8"><strong>@Model.TotalSalary.ToString("C")</strong></dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Currency)</dt>
+                            <dd class="col-sm-8">@Model.Currency</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.PaymentFrequency)</dt>
+                            <dd class="col-sm-8">@Model.PaymentFrequency</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.EffectiveDate)</dt>
+                            <dd class="col-sm-8">@Model.EffectiveDate.ToString("dd/MM/yyyy")</dd>
+
+                            <dt class="col-sm-4">Status</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.Status == EmployeesManagement.Models.SalaryStatus.Approved)
+                                {
+                                    <span class="badge badge-success">Approved</span>
+                                }
+                                else if (Model.Status == EmployeesManagement.Models.SalaryStatus.Rejected)
+                                {
+                                    <span class="badge badge-danger">Rejected</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-warning">Pending</span>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-4">Approved By</dt>
+                            <dd class="col-sm-8">@(Model.ApprovedBy ?? "-")</dd>
+
+                            <dt class="col-sm-4">Approved Date</dt>
+                            <dd class="col-sm-8">@(Model.ApprovedDate?.ToString("dd/MM/yyyy") ?? "-")</dd>
+
+                            <dt class="col-sm-4">Rejection Reason</dt>
+                            <dd class="col-sm-8">@(Model.RejectionReason ?? "-")</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        @if (Model.Status == EmployeesManagement.Models.SalaryStatus.Pending)
+                        {
+                            <form asp-action="Approve" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-success" onclick="return confirm('Approve this salary?')">
+                                    Approve
+                                </button>
+                            </form>
+                            <form asp-action="Reject" asp-route-id="@Model.Id" method="post" style="display: inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-secondary" onclick="return confirm('Reject this salary?')">
+                                    Reject
+                                </button>
+                            </form>
+                        }
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Index" class="btn btn-default">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

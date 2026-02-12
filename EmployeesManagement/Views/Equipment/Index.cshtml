@@ -1,0 +1,93 @@
+@model IEnumerable<EmployeesManagement.Models.Equipment>
+
+@{
+    ViewData["Title"] = "Equipment";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Equipment Management</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Equipment</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Equipment List</h3>
+                        <div class="card-tools">
+                            <a asp-action="Create" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> Add New Equipment
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.Name)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Type)</th>
+                                    <th>@Html.DisplayNameFor(model => model.SerialNumber)</th>
+                                    <th>Assigned To</th>
+                                    <th>@Html.DisplayNameFor(model => model.Status)</th>
+                                    <th>@Html.DisplayNameFor(model => model.PurchaseDate)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Type)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.SerialNumber)</td>
+                                        <td>@(item.AssignedToEmployee?.FullName ?? "Not Assigned")</td>
+                                        <td>
+                                            @switch (item.Status)
+                                            {
+                                                case EmployeesManagement.Models.EquipmentStatus.Available:
+                                                    <span class="badge badge-success">Available</span>
+                                                    break;
+                                                case EmployeesManagement.Models.EquipmentStatus.Assigned:
+                                                    <span class="badge badge-info">Assigned</span>
+                                                    break;
+                                                case EmployeesManagement.Models.EquipmentStatus.UnderMaintenance:
+                                                    <span class="badge badge-warning">Under Maintenance</span>
+                                                    break;
+                                                case EmployeesManagement.Models.EquipmentStatus.Retired:
+                                                    <span class="badge badge-secondary">Retired</span>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td>@(item.PurchaseDate?.ToString("dd/MM/yyyy") ?? "N/A")</td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                                            @if (item.Status == EmployeesManagement.Models.EquipmentStatus.Available)
+                                            {
+                                                <a asp-action="Assign" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Assign</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

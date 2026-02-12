@@ -4,6 +4,7 @@ using EmployeesManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EmployeesManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260212124028_AddRecruitmentSalaryEquipmentFeatures")]
+    partial class AddRecruitmentSalaryEquipmentFeatures
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +106,6 @@ namespace EmployeesManagement.Data.Migrations
                     b.Property<DateTime?>("InterviewDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("InterviewNotes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("JobOpeningId")
                         .HasColumnType("int");
 
@@ -186,15 +186,9 @@ namespace EmployeesManagement.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("HireDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("int");
 
                     b.Property<string>("MiddleName")
                         .IsRequired()
@@ -215,12 +209,7 @@ namespace EmployeesManagement.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("TerminationDate")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ManagerId");
 
                     b.ToTable("Employees");
                 });
@@ -281,9 +270,6 @@ namespace EmployeesManagement.Data.Migrations
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("WarrantyExpiry")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
@@ -363,12 +349,6 @@ namespace EmployeesManagement.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ApprovedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ApprovedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<decimal>("BasicSalary")
                         .HasColumnType("decimal(18,2)");
 
@@ -406,12 +386,6 @@ namespace EmployeesManagement.Data.Migrations
                     b.Property<string>("PaymentFrequency")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RejectionReason")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<decimal?>("TransportAllowance")
                         .HasColumnType("decimal(18,2)");
@@ -686,21 +660,12 @@ namespace EmployeesManagement.Data.Migrations
             modelBuilder.Entity("EmployeesManagement.Models.Candidate", b =>
                 {
                     b.HasOne("EmployeesManagement.Models.JobOpening", "JobOpening")
-                        .WithMany("Candidates")
+                        .WithMany()
                         .HasForeignKey("JobOpeningId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("JobOpening");
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.Employee", b =>
-                {
-                    b.HasOne("EmployeesManagement.Models.Employee", "Manager")
-                        .WithMany()
-                        .HasForeignKey("ManagerId");
-
-                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("EmployeesManagement.Models.Equipment", b =>
@@ -783,11 +748,6 @@ namespace EmployeesManagement.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("EmployeesManagement.Models.JobOpening", b =>
-                {
-                    b.Navigation("Candidates");
                 });
 #pragma warning restore 612, 618
         }

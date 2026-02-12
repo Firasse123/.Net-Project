@@ -1,0 +1,221 @@
+@model IEnumerable<EmployeesManagement.Models.Candidate>
+
+@{
+    ViewData["Title"] = "Candidates";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Candidates</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Candidates</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <!-- Recruitment Pipeline Visualization -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Recruitment Pipeline</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <div class="info-box bg-info">
+                                    <span class="info-box-icon"><i class="fas fa-file-alt"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Applied</span>
+                                        <span class="info-box-number">@ViewBag.AppliedCount</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <div class="info-box bg-warning">
+                                    <span class="info-box-icon"><i class="fas fa-eye"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Under Review</span>
+                                        <span class="info-box-number">@ViewBag.UnderReviewCount</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <div class="info-box bg-primary">
+                                    <span class="info-box-icon"><i class="fas fa-comments"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Interviewed</span>
+                                        <span class="info-box-number">@ViewBag.InterviewedCount</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <div class="info-box bg-olive">
+                                    <span class="info-box-icon"><i class="fas fa-envelope"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Offered</span>
+                                        <span class="info-box-number">@ViewBag.OfferedCount</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <div class="info-box bg-success">
+                                    <span class="info-box-icon"><i class="fas fa-check"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Hired</span>
+                                        <span class="info-box-number">@ViewBag.HiredCount</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-sm-4 col-6">
+                                <div class="info-box bg-danger">
+                                    <span class="info-box-icon"><i class="fas fa-times"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Rejected</span>
+                                        <span class="info-box-number">@ViewBag.RejectedCount</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters and Candidates List -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Candidates List</h3>
+                        <div class="card-tools">
+                            <a asp-action="Create" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> Add New Candidate
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <!-- Filter Form -->
+                        <form asp-action="Index" method="get" class="mb-3">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Search</label>
+                                        <input type="text" name="searchString" value="@ViewBag.CurrentSearch" class="form-control" placeholder="Name or Email..." />
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Status</label>
+                                        <select name="status" class="form-control">
+                                            <option value="">All Statuses</option>
+                                            <option value="0" selected="@(ViewBag.CurrentStatus == EmployeesManagement.Models.CandidateStatus.Applied)">Applied</option>
+                                            <option value="1" selected="@(ViewBag.CurrentStatus == EmployeesManagement.Models.CandidateStatus.UnderReview)">Under Review</option>
+                                            <option value="2" selected="@(ViewBag.CurrentStatus == EmployeesManagement.Models.CandidateStatus.Interviewed)">Interviewed</option>
+                                            <option value="3" selected="@(ViewBag.CurrentStatus == EmployeesManagement.Models.CandidateStatus.Offered)">Offered</option>
+                                            <option value="4" selected="@(ViewBag.CurrentStatus == EmployeesManagement.Models.CandidateStatus.Hired)">Hired</option>
+                                            <option value="5" selected="@(ViewBag.CurrentStatus == EmployeesManagement.Models.CandidateStatus.Rejected)">Rejected</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>Job Opening</label>
+                                        <select name="jobOpeningId" class="form-control" asp-items="ViewBag.JobOpenings">
+                                            <option value="">All Positions</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>&nbsp;</label>
+                                        <div>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-search"></i> Filter
+                                            </button>
+                                            <a asp-action="Index" class="btn btn-default">
+                                                <i class="fas fa-redo"></i> Reset
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.FullName)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Email)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                                    <th>Job Applied</th>
+                                    <th>@Html.DisplayNameFor(model => model.ApplicationDate)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Status)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Id">
+                                                @Html.DisplayFor(modelItem => item.FullName)
+                                            </a>
+                                        </td>
+                                        <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Phone)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.JobOpening.JobTitle)</td>
+                                        <td>@item.ApplicationDate.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            @switch (item.Status)
+                                            {
+                                                case EmployeesManagement.Models.CandidateStatus.Applied:
+                                                    <span class="badge badge-info">Applied</span>
+                                                    break;
+                                                case EmployeesManagement.Models.CandidateStatus.UnderReview:
+                                                    <span class="badge badge-warning">Under Review</span>
+                                                    break;
+                                                case EmployeesManagement.Models.CandidateStatus.Interviewed:
+                                                    <span class="badge badge-primary">Interviewed</span>
+                                                    break;
+                                                case EmployeesManagement.Models.CandidateStatus.Offered:
+                                                    <span class="badge badge-success">Offered</span>
+                                                    break;
+                                                case EmployeesManagement.Models.CandidateStatus.Hired:
+                                                    <span class="badge badge-success">Hired</span>
+                                                    break;
+                                                case EmployeesManagement.Models.CandidateStatus.Rejected:
+                                                    <span class="badge badge-danger">Rejected</span>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,86 @@
+@model IEnumerable<EmployeesManagement.Models.JobOpening>
+
+@{
+    ViewData["Title"] = "Job Openings";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Job Openings</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Job Openings</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Job Openings List</h3>
+                        <div class="card-tools">
+                            <a asp-action="Create" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> Add New Job
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>@Html.DisplayNameFor(model => model.JobTitle)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Department)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Location)</th>
+                                    <th>@Html.DisplayNameFor(model => model.NumberOfPositions)</th>
+                                    <th>@Html.DisplayNameFor(model => model.Status)</th>
+                                    <th>@Html.DisplayNameFor(model => model.PostedDate)</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.JobTitle)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Department)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.Location)</td>
+                                        <td>@Html.DisplayFor(modelItem => item.NumberOfPositions)</td>
+                                        <td>
+                                            @if (item.Status == EmployeesManagement.Models.JobStatus.Open)
+                                            {
+                                                <span class="badge badge-success">Open</span>
+                                            }
+                                            else if (item.Status == EmployeesManagement.Models.JobStatus.Closed)
+                                            {
+                                                <span class="badge badge-danger">Closed</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-warning">On Hold</span>
+                                            }
+                                        </td>
+                                        <td>@item.PostedDate.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,111 @@
+@model IEnumerable<EmployeesManagement.Models.Salary>
+
+@{
+    ViewData["Title"] = "Salaries";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Employee Salaries</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="breadcrumb-item active">Salaries</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Salaries List</h3>
+                        <div class="card-tools">
+                            <a asp-action="Reports" class="btn btn-info btn-sm">
+                                <i class="fas fa-chart-bar"></i> Reports
+                            </a>
+                            <a asp-action="BulkUpdate" class="btn btn-primary btn-sm">
+                                <i class="fas fa-upload"></i> Bulk Update
+                            </a>
+                            <a asp-action="Create" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus"></i> Add New Salary
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>@Html.DisplayNameFor(model => model.BasicSalary)</th>
+                                    <th>@Html.DisplayNameFor(model => model.HousingAllowance)</th>
+                                    <th>@Html.DisplayNameFor(model => model.TransportAllowance)</th>
+                                    <th>@Html.DisplayNameFor(model => model.MedicalAllowance)</th>
+                                    <th>Total Salary</th>
+                                    <th>@Html.DisplayNameFor(model => model.EffectiveDate)</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(modelItem => item.Employee.FullName)</td>
+                                        <td>@item.BasicSalary.ToString("C")</td>
+                                        <td>@(item.HousingAllowance?.ToString("C") ?? "N/A")</td>
+                                        <td>@(item.TransportAllowance?.ToString("C") ?? "N/A")</td>
+                                        <td>@(item.MedicalAllowance?.ToString("C") ?? "N/A")</td>
+                                        <td><strong>@item.TotalSalary.ToString("C")</strong></td>
+                                        <td>@item.EffectiveDate.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            @if (item.Status == EmployeesManagement.Models.SalaryStatus.Approved)
+                                            {
+                                                <span class="badge badge-success">Approved</span>
+                                            }
+                                            else if (item.Status == EmployeesManagement.Models.SalaryStatus.Rejected)
+                                            {
+                                                <span class="badge badge-danger">Rejected</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-warning">Pending</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                                            @if (item.Status == EmployeesManagement.Models.SalaryStatus.Pending)
+                                            {
+                                                <form asp-action="Approve" asp-route-id="@item.Id" method="post" style="display: inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Approve this salary?')">
+                                                        Approve
+                                                    </button>
+                                                </form>
+                                                <form asp-action="Reject" asp-route-id="@item.Id" method="post" style="display: inline;">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-secondary btn-sm" onclick="return confirm('Reject this salary?')">
+                                                        Reject
+                                                    </button>
+                                                </form>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

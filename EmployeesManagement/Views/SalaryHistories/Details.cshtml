@@ -1,0 +1,77 @@
+@model EmployeesManagement.Models.SalaryHistory
+
+@{
+    ViewData["Title"] = "Salary History Details";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Salary History Details</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Salary Change Record</h3>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">Employee</dt>
+                            <dd class="col-sm-8">@Model.Employee?.FullName</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.OldSalary)</dt>
+                            <dd class="col-sm-8">@Model.OldSalary.ToString("C")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.NewSalary)</dt>
+                            <dd class="col-sm-8">@Model.NewSalary.ToString("C")</dd>
+                            
+                            <dt class="col-sm-4">Change Amount</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.ChangeAmount >= 0)
+                                {
+                                    <span class="text-success"><strong>+@Model.ChangeAmount.ToString("C")</strong></span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger"><strong>@Model.ChangeAmount.ToString("C")</strong></span>
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-4">Change Percentage</dt>
+                            <dd class="col-sm-8">
+                                @if (Model.ChangePercentage >= 0)
+                                {
+                                    <span class="badge badge-success badge-lg">+@Model.ChangePercentage.ToString("F2")%</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-danger badge-lg">@Model.ChangePercentage.ToString("F2")%</span>
+                                }
+                            </dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.EffectiveDate)</dt>
+                            <dd class="col-sm-8">@Model.EffectiveDate.ToString("dd/MM/yyyy")</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Reason)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Reason)</dd>
+                            
+                            <dt class="col-sm-4">@Html.DisplayNameFor(model => model.Notes)</dt>
+                            <dd class="col-sm-8">@Html.DisplayFor(model => model.Notes)</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Index" class="btn btn-default">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

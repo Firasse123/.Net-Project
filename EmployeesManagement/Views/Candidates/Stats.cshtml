@@ -1,0 +1,225 @@
+@model EmployeesManagement.Models.RecruitmentStatsViewModel
+
+@{
+    ViewData["Title"] = "Recruitment Statistics";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Recruitment Pipeline Statistics</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-2 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.TotalCandidates</h3>
+                        <p>Total Candidates</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="small-box bg-primary">
+                    <div class="inner">
+                        <h3>@Model.Applied</h3>
+                        <p>Applied</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.UnderReview</h3>
+                        <p>Under Review</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="small-box bg-secondary">
+                    <div class="inner">
+                        <h3>@Model.Interviewed</h3>
+                        <p>Interviewed</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.Offered</h3>
+                        <p>Offered</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.Hired</h3>
+                        <p>Hired</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Pipeline Metrics</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="metric-item mb-3">
+                            <strong>Hire Rate:</strong>
+                            <span class="float-right">@Model.HireRate.ToString("N1")%</span>
+                        </div>
+                        <div class="metric-item mb-3">
+                            <strong>Application %:</strong>
+                            <span class="float-right">@(Model.TotalCandidates > 0 ? ((decimal)Model.Applied / Model.TotalCandidates * 100).ToString("N1") : "0")%</span>
+                        </div>
+                        <div class="metric-item mb-3">
+                            <strong>Under Review %:</strong>
+                            <span class="float-right">@(Model.TotalCandidates > 0 ? ((decimal)Model.UnderReview / Model.TotalCandidates * 100).ToString("N1") : "0")%</span>
+                        </div>
+                        <div class="metric-item mb-3">
+                            <strong>Interview %:</strong>
+                            <span class="float-right">@(Model.TotalCandidates > 0 ? ((decimal)Model.Interviewed / Model.TotalCandidates * 100).ToString("N1") : "0")%</span>
+                        </div>
+                        <div class="metric-item">
+                            <strong>Rejection %:</strong>
+                            <span class="float-right">@(Model.TotalCandidates > 0 ? ((decimal)Model.Rejected / Model.TotalCandidates * 100).ToString("N1") : "0")%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Candidates by Position</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Position</th>
+                                    <th>Total</th>
+                                    <th>Applied</th>
+                                    <th>Interviewed</th>
+                                    <th>Hired</th>
+                                    <th>Rejected</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.ByJobOpening.Any())
+                                {
+                                    @foreach (var item in Model.ByJobOpening)
+                                    {
+                                        <tr>
+                                            <td>@item.Position</td>
+                                            <td><span class="badge badge-primary">@item.Total</span></td>
+                                            <td><span class="badge badge-info">@item.Applied</span></td>
+                                            <td><span class="badge badge-secondary">@item.Interviewed</span></td>
+                                            <td><span class="badge badge-success">@item.Hired</span></td>
+                                            <td><span class="badge badge-danger">@item.Rejected</span></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted">No candidates found</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Pipeline Status Overview</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-2">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header">@Model.Applied</h5>
+                                    <span class="description-text">Applied</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header">@Model.UnderReview</h5>
+                                    <span class="description-text">Under Review</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header">@Model.Interviewed</h5>
+                                    <span class="description-text">Interviewed</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header">@Model.Offered</h5>
+                                    <span class="description-text">Offered</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header">@Model.Hired</h5>
+                                    <span class="description-text">Hired</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Model.Rejected</h5>
+                                    <span class="description-text">Rejected</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+.metric-item:last-child {
+    border-bottom: none;
+}
+</style>

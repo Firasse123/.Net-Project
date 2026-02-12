@@ -176,8 +176,8 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="/" class="brand-link">
-                <img src="AdminLTE/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">AdminLTE 3</span>
+                <img src="AdminLTE/dist/img/AdminLTELogo.png" alt="EMS Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Employee MS</span>
     </a>
 
     <!-- Sidebar -->
@@ -195,24 +195,150 @@
       <!-- Sidebar Menu -->
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+          <!-- Dashboard -->
+          <li class="nav-item">
+            <a href="/" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
+              <p>Dashboard</p>
             </a>
           </li>
-                        <li class="nav-item">
-                            <a href="/Employees" class="nav-link">
-                                <i class="nav-icon fas fa-th"></i>
-                                <p>
-                                    Employees
-                                </p>
-                            </a>
-                        </li>
+
+          <!-- Employees Management -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users"></i>
+              <p>
+                Employees
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/Employees" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All Employees</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/Employees/Create" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Employee</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Recruitment -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-briefcase"></i>
+              <p>
+                Recruitment
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/JobOpenings" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Job Openings</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/Candidates" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Candidates</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Compensation -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-dollar-sign"></i>
+              <p>
+                Compensation
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/Salaries" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Salaries</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/Benefits" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Benefits</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/SalaryHistories" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Salary History</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Equipment -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-laptop"></i>
+              <p>
+                Equipment
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/Equipment" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>All Equipment</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/Equipment/Create" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Add Equipment</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Reports -->
+          <li class="nav-item">
+            <a href="/Salaries/Reports" class="nav-link">
+              <i class="nav-icon fas fa-chart-bar"></i>
+              <p>
+                Reports
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="/Salaries/Reports" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Payroll Summary</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/Equipment/Audit" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Equipment Audit</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="/Candidates/Stats" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Recruitment Stats</p>
+                </a>
+              </li>
+            </ul>
+          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -227,12 +353,15 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Dashboard</h1>
+            <h1 class="m-0">@ViewData["Title"]</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1</li>
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              @if (ViewData["Title"]?.ToString() != "Dashboard")
+              {
+                <li class="breadcrumb-item active">@ViewData["Title"]</li>
+              }
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->

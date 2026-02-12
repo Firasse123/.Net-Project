@@ -1,0 +1,310 @@
+@model EmployeesManagement.Models.Employee
+
+@{
+    ViewData["Title"] = "Employee Profile";
+}
+
+<!-- Profile Header -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline">
+            <div class="card-body box-profile">
+                <div class="text-center">
+                    @if (!string.IsNullOrEmpty(Model.ProfilePicture))
+                    {
+                        <img class="profile-user-img img-fluid img-circle" src="@Model.ProfilePicture" alt="User profile picture">
+                    }
+                    else
+                    {
+                        <img class="profile-user-img img-fluid img-circle" src="/AdminLTE/dist/img/user2-160x160.jpg" alt="User profile picture">
+                    }
+                </div>
+
+                <h3 class="profile-username text-center">@Model.FullName</h3>
+                <p class="text-muted text-center">@Model.Designation</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                    <li class="list-group-item">
+                        <b>Employee No</b> <a class="float-right">@Model.EmpNo</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Department</b> <a class="float-right">@Model.Department</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Status</b> 
+                        <span class="float-right badge @(Model.Status == EmployeesManagement.Models.EmployeeStatus.Active ? "badge-success" : Model.Status == EmployeesManagement.Models.EmployeeStatus.OnLeave ? "badge-warning" : "badge-danger")">
+                            @Model.Status
+                        </span>
+                    </li>
+                    @if (Model.HireDate.HasValue)
+                    {
+                        <li class="list-group-item">
+                            <b>Hire Date</b> <a class="float-right">@Model.HireDate.Value.ToString("MMM dd, yyyy")</a>
+                        </li>
+                    }
+                </ul>
+
+                <a href="/Employees/Edit/@Model.Id" class="btn btn-primary btn-block"><i class="fas fa-edit"></i> <b>Edit Profile</b></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-primary card-outline card-outline-tabs">
+            <div class="card-header p-0 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="personal-tab" data-toggle="pill" href="#personal" role="tab" aria-controls="personal" aria-selected="true">
+                            <i class="fas fa-user"></i> Personal Info
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="salary-tab" data-toggle="pill" href="#salary" role="tab" aria-controls="salary" aria-selected="false">
+                            <i class="fas fa-dollar-sign"></i> Salary & Compensation
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="benefits-tab" data-toggle="pill" href="#benefits" role="tab" aria-controls="benefits" aria-selected="false">
+                            <i class="fas fa-gift"></i> Benefits
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="equipment-tab" data-toggle="pill" href="#equipment" role="tab" aria-controls="equipment" aria-selected="false">
+                            <i class="fas fa-laptop"></i> Equipment
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-tabContent">
+                    <!-- Personal Info Tab -->
+                    <div class="tab-pane fade show active" id="personal" role="tabpanel" aria-labelledby="personal-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <dl class="row">
+                                    <dt class="col-sm-4">Full Name:</dt>
+                                    <dd class="col-sm-8">@Model.FullName</dd>
+                                    
+                                    <dt class="col-sm-4">Email:</dt>
+                                    <dd class="col-sm-8">@Model.EmailAddress</dd>
+                                    
+                                    <dt class="col-sm-4">Phone:</dt>
+                                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
+                                    
+                                    <dt class="col-sm-4">Date of Birth:</dt>
+                                    <dd class="col-sm-8">@Model.DateOfBirth.ToString("MMM dd, yyyy")</dd>
+                                    
+                                    <dt class="col-sm-4">Country:</dt>
+                                    <dd class="col-sm-8">@Model.Country</dd>
+                                </dl>
+                            </div>
+                            <div class="col-md-6">
+                                <dl class="row">
+                                    <dt class="col-sm-4">Address:</dt>
+                                    <dd class="col-sm-8">@Model.Address</dd>
+                                    
+                                    <dt class="col-sm-4">Department:</dt>
+                                    <dd class="col-sm-8">@Model.Department</dd>
+                                    
+                                    <dt class="col-sm-4">Designation:</dt>
+                                    <dd class="col-sm-8">@Model.Designation</dd>
+                                    
+                                    @if (Model.Manager != null)
+                                    {
+                                        <dt class="col-sm-4">Manager:</dt>
+                                        <dd class="col-sm-8">
+                                            <a href="/Employees/Profile/@Model.Manager.Id">@Model.Manager.FullName</a>
+                                        </dd>
+                                    }
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Salary Tab -->
+                    <div class="tab-pane fade" id="salary" role="tabpanel" aria-labelledby="salary-tab">
+                        @if (ViewBag.CurrentSalary != null)
+                        {
+                            var salary = ViewBag.CurrentSalary as EmployeesManagement.Models.Salary;
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5>Current Salary</h5>
+                                    <table class="table table-bordered">
+                                        <tr>
+                                            <td><strong>Basic Salary:</strong></td>
+                                            <td>@salary.BasicSalary.ToString("C")</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Housing Allowance:</strong></td>
+                                            <td>@((salary.HousingAllowance ?? 0).ToString("C"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Transport Allowance:</strong></td>
+                                            <td>@((salary.TransportAllowance ?? 0).ToString("C"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Medical Allowance:</strong></td>
+                                            <td>@((salary.MedicalAllowance ?? 0).ToString("C"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Other Allowances:</strong></td>
+                                            <td>@((salary.OtherAllowances ?? 0).ToString("C"))</td>
+                                        </tr>
+                                        <tr class="table-primary">
+                                            <td><strong>Total Salary:</strong></td>
+                                            <td><strong>@salary.TotalSalary.ToString("C")</strong></td>
+                                        </tr>
+                                    </table>
+                                    <a href="/Salaries/Edit/@salary.Id" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Update Salary</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Salary History</h5>
+                                    @if (ViewBag.SalaryHistory != null && ((List<EmployeesManagement.Models.SalaryHistory>)ViewBag.SalaryHistory).Count > 0)
+                                    {
+                                        <div class="table-responsive" style="max-height: 300px;">
+                                            <table class="table table-sm">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Date</th>
+                                                        <th>Old</th>
+                                                        <th>New</th>
+                                                        <th>Change</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var history in (List<EmployeesManagement.Models.SalaryHistory>)ViewBag.SalaryHistory)
+                                                    {
+                                                        <tr>
+                                                            <td>@history.EffectiveDate.ToString("MMM yyyy")</td>
+                                                            <td>@history.OldSalary.ToString("C0")</td>
+                                                            <td>@history.NewSalary.ToString("C0")</td>
+                                                            <td>
+                                                                <span class="badge @(history.ChangeAmount >= 0 ? "badge-success" : "badge-danger")">
+                                                                    @history.ChangePercentage.ToString("F1")%
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-muted">No salary history available.</p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i> No salary information assigned.
+                                <a href="/Salaries/Create" class="btn btn-sm btn-primary ml-2"><i class="fas fa-plus"></i> Add Salary</a>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Benefits Tab -->
+                    <div class="tab-pane fade" id="benefits" role="tabpanel" aria-labelledby="benefits-tab">
+                        <div class="mb-3">
+                            <a href="/Benefits/Create" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Add Benefit</a>
+                        </div>
+                        @if (ViewBag.Benefits != null && ((List<EmployeesManagement.Models.Benefit>)ViewBag.Benefits).Count > 0)
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Benefit Name</th>
+                                            <th>Type</th>
+                                            <th>Value</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var benefit in (List<EmployeesManagement.Models.Benefit>)ViewBag.Benefits)
+                                        {
+                                            <tr>
+                                                <td>@benefit.BenefitName</td>
+                                                <td>@benefit.Type</td>
+                                                <td>@((benefit.Value ?? 0).ToString("C"))</td>
+                                                <td>@benefit.StartDate.ToString("MMM dd, yyyy")</td>
+                                                <td>@(benefit.EndDate?.ToString("MMM dd, yyyy") ?? "Ongoing")</td>
+                                                <td>
+                                                    <span class="badge @(benefit.IsActive ? "badge-success" : "badge-secondary")">
+                                                        @(benefit.IsActive ? "Active" : "Inactive")
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <a href="/Benefits/Details/@benefit.Id" class="btn btn-sm btn-info"><i class="fas fa-eye"></i></a>
+                                                    <a href="/Benefits/Edit/@benefit.Id" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No benefits assigned.</p>
+                        }
+                    </div>
+
+                    <!-- Equipment Tab -->
+                    <div class="tab-pane fade" id="equipment" role="tabpanel" aria-labelledby="equipment-tab">
+                        <div class="mb-3">
+                            <a href="/Equipment/Create" class="btn btn-success btn-sm"><i class="fas fa-plus"></i> Assign Equipment</a>
+                        </div>
+                        @if (ViewBag.Equipment != null && ((List<EmployeesManagement.Models.Equipment>)ViewBag.Equipment).Count > 0)
+                        {
+                            <div class="row">
+                                @foreach (var item in (List<EmployeesManagement.Models.Equipment>)ViewBag.Equipment)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    @item.Name
+                                                    <span class="badge float-right @(item.Status == EmployeesManagement.Models.EquipmentStatus.Assigned ? "badge-success" : item.Status == EmployeesManagement.Models.EquipmentStatus.UnderMaintenance ? "badge-warning" : "badge-secondary")">
+                                                        @item.Status
+                                                    </span>
+                                                </h5>
+                                                <p class="card-text">
+                                                    <strong>Type:</strong> @item.Type<br />
+                                                    <strong>Serial Number:</strong> @item.SerialNumber<br />
+                                                    <strong>Assigned Date:</strong> @item.AssignmentDate?.ToString("MMM dd, yyyy")<br />
+                                                    @if (item.ReturnDate.HasValue)
+                                                    {
+                                                        <strong>Return Date:</strong> @item.ReturnDate.Value.ToString("MMM dd, yyyy")<br />
+                                                    }
+                                                </p>
+                                                <a href="/Equipment/Details/@item.Id" class="btn btn-sm btn-info"><i class="fas fa-eye"></i> Details</a>
+                                                <a href="/Equipment/Edit/@item.Id" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i> Edit</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted">No equipment assigned.</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="/Employees" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back to List</a>
+</div>

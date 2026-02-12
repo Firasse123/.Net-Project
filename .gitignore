@@ -403,3 +403,26 @@ FodyWeavers.xsd
 
 
 .dotnet
+
+# Application-specific files
+# Local appsettings with connection strings
+appsettings.json
+appsettings.Production.json
+
+# User secrets
+[Uu]ser[Ss]ecrets/
+.user
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Rider IDE
+.idea/
+*.sln.iml
+
+# Database files
+*.mdf
+*.ldf
+*.ndf

@@ -1,0 +1,170 @@
+@model EmployeesManagement.Models.EquipmentAuditViewModel
+
+@{
+    ViewData["Title"] = "Equipment Audit Report";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Equipment Audit Report</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-info">
+                    <div class="inner">
+                        <h3>@Model.TotalEquipment</h3>
+                        <p>Total Equipment</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-success">
+                    <div class="inner">
+                        <h3>@Model.AssignedEquipment</h3>
+                        <p>Assigned</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-user-check"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-warning">
+                    <div class="inner">
+                        <h3>@Model.AvailableEquipment</h3>
+                        <p>Available</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-check"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-6">
+                <div class="small-box bg-danger">
+                    <div class="inner">
+                        <h3>@Model.UnderMaintenanceEquipment</h3>
+                        <p>Under Maintenance</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Equipment by Type</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Quantity</th>
+                                    <th>Total Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.ByType)
+                                {
+                                    <tr>
+                                        <td>@item.Type</td>
+                                        <td><span class="badge badge-primary">@item.Count</span></td>
+                                        <td>@item.Value.ToString("C")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Equipment Assignments</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Items Assigned</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.AssignmentsSummary.Any())
+                                {
+                                    @foreach (var item in Model.AssignmentsSummary)
+                                    {
+                                        <tr>
+                                            <td>@item.Employee</td>
+                                            <td><span class="badge badge-success">@item.Count</span></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="2" class="text-center text-muted">No equipment assigned</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Equipment Status Summary</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-3">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header">@Model.AssignedEquipment</h5>
+                                    <span class="description-text">Assigned</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header">@Model.AvailableEquipment</h5>
+                                    <span class="description-text">Available</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="description-block border-right">
+                                    <h5 class="description-header">@Model.UnderMaintenanceEquipment</h5>
+                                    <span class="description-text">Under Maintenance</span>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="description-block">
+                                    <h5 class="description-header">@Model.RetiredEquipment</h5>
+                                    <span class="description-text">Retired</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,108 +1,144 @@
 ﻿@model EmployeesManagement.Models.Employee
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Employee Details";
 }
 
-<h1>Details</h1>
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Employee Details</h3>
+    </div>
+    <div class="card-body">
+        <!-- Quick Stats -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="info-box bg-info">
+                    <span class="info-box-icon"><i class="fas fa-dollar-sign"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Salary Status</span>
+                        <span class="info-box-number">@(ViewBag.HasSalary ? "Assigned" : "Not Assigned")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box bg-success">
+                    <span class="info-box-icon"><i class="fas fa-gift"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Active Benefits</span>
+                        <span class="info-box-number">@ViewBag.TotalBenefits</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box bg-warning">
+                    <span class="info-box-icon"><i class="fas fa-laptop"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Equipment</span>
+                        <span class="info-box-number">@ViewBag.AssignedEquipment</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-gradient-primary"><i class="fas fa-user"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Status</span>
+                        <span class="badge @(Model.Status == EmployeesManagement.Models.EmployeeStatus.Active ? "badge-success" : Model.Status == EmployeesManagement.Models.EmployeeStatus.OnLeave ? "badge-warning" : "badge-danger") mt-2">
+                            @Model.Status
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div>
-    <h4>Employee</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmpNo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmpNo)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MiddleName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MiddleName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EmailAddress)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EmailAddress)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Country)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Country)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateOfBirth)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateOfBirth)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Department)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Department)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Designation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Designation)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedById)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedById)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedById)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedById)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifiedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifiedOn)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+        <!-- Employee Information -->
+        <div class="row">
+            <div class="col-md-6">
+                <h4>Personal Information</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">Employee No:</dt>
+                    <dd class="col-sm-8">@Model.EmpNo</dd>
+                    
+                    <dt class="col-sm-4">Full Name:</dt>
+                    <dd class="col-sm-8">@Model.FullName</dd>
+                    
+                    <dt class="col-sm-4">Email:</dt>
+                    <dd class="col-sm-8">@Model.EmailAddress</dd>
+                    
+                    <dt class="col-sm-4">Phone:</dt>
+                    <dd class="col-sm-8">@Model.PhoneNumber</dd>
+                    
+                    <dt class="col-sm-4">Date of Birth:</dt>
+                    <dd class="col-sm-8">@Model.DateOfBirth.ToString("MMMM dd, yyyy")</dd>
+                    
+                    <dt class="col-sm-4">Country:</dt>
+                    <dd class="col-sm-8">@Model.Country</dd>
+                    
+                    <dt class="col-sm-4">Address:</dt>
+                    <dd class="col-sm-8">@Model.Address</dd>
+                </dl>
+            </div>
+            
+            <div class="col-md-6">
+                <h4>Employment Information</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">Department:</dt>
+                    <dd class="col-sm-8">@Model.Department</dd>
+                    
+                    <dt class="col-sm-4">Designation:</dt>
+                    <dd class="col-sm-8">@Model.Designation</dd>
+                    
+                    @if (Model.HireDate.HasValue)
+                    {
+                        <dt class="col-sm-4">Hire Date:</dt>
+                        <dd class="col-sm-8">@Model.HireDate.Value.ToString("MMMM dd, yyyy")</dd>
+                    }
+                    
+                    @if (Model.Manager != null)
+                    {
+                        <dt class="col-sm-4">Manager:</dt>
+                        <dd class="col-sm-8">
+                            <a href="/Employees/Profile/@Model.Manager.Id">@Model.Manager.FullName</a>
+                        </dd>
+                    }
+                    
+                    @if (Model.TerminationDate.HasValue)
+                    {
+                        <dt class="col-sm-4">Termination Date:</dt>
+                        <dd class="col-sm-8 text-danger">@Model.TerminationDate.Value.ToString("MMMM dd, yyyy")</dd>
+                    }
+                </dl>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <h5>Quick Actions</h5>
+                <div class="btn-group">
+                    <a href="/Employees/Profile/@Model.Id" class="btn btn-info">
+                        <i class="fas fa-user"></i> View Full Profile
+                    </a>
+                    <a href="/Employees/Edit/@Model.Id" class="btn btn-primary">
+                        <i class="fas fa-edit"></i> Edit Employee
+                    </a>
+                    @if (!ViewBag.HasSalary)
+                    {
+                        <a href="/Salaries/Create?employeeId=@Model.Id" class="btn btn-success">
+                            <i class="fas fa-dollar-sign"></i> Assign Salary
+                        </a>
+                    }
+                    <a href="/Benefits/Create?employeeId=@Model.Id" class="btn btn-warning">
+                        <i class="fas fa-gift"></i> Add Benefit
+                    </a>
+                    <a href="/Equipment/Create?employeeId=@Model.Id" class="btn btn-secondary">
+                        <i class="fas fa-laptop"></i> Assign Equipment
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <a href="/Employees" class="btn btn-default"><i class="fas fa-arrow-left"></i> Back to List</a>
+    </div>
 </div>
