@@ -1,5 +1,14 @@
-﻿namespace EmployeesManagement.Models
+﻿using System;
+
+namespace EmployeesManagement.Models
 {
+    public enum EmployeeStatus
+    {
+        Active,
+        OnLeave,
+        Terminated
+    }
+
     public class Employee:UserActivity
     {
 
@@ -19,9 +28,7 @@
         public string Department { get; set; }
         public string Designation { get; set; }
 
-
-
-
-
+        public string? ProfilePicture { get; set; }
+        public EmployeeStatus Status { get; set; }
     }
 }
