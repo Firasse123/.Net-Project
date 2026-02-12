@@ -2,37 +2,8 @@
 
 A comprehensive ASP.NET Core 8.0 MVC application for managing employees, recruitment, compensation, equipment, and business workflows.
 
-## 🎯 Features Implemented
 
-### Phase 3: Recruitment Pipeline
-- Candidate management with status tracking (Applied, Under Review, Interviewed, Offered, Hired, Rejected)
-- Job openings management
-- Interview scheduling
-- Recruitment workflow validations
 
-### Phase 4: Compensation Management
-- Employee salary management
-- Salary approval workflow (Pending → Approved/Rejected)
-- Bulk salary updates
-- Benefits management (Activate/Deactivate)
-- Compensation reports and payroll summaries
-
-### Phase 5: Equipment Tracking
-- Equipment lifecycle management (Available → Assigned → Under Maintenance → Retired)
-- Equipment assignment to employees
-- Maintenance tracking
-- Equipment audit reports
-
-### Phase 6: Business Logic & Validations
-- Hard-blocking recruitment workflow rules
-- Model-level data annotations (StringLength, Range, Phone, Email)
-- Controller-level validation
-- Error handling and alerts
-
-### Phase 7: Reporting Dashboard
-- **Payroll Reports**: Total payroll, average salary, department breakdown, salary status summary
-- **Equipment Audit**: Equipment by type, status breakdown, employee assignments
-- **Recruitment Statistics**: Pipeline metrics, hire rates, position-wise candidate analysis
 
 ## 📋 Tech Stack
 
@@ -142,27 +113,7 @@ EmployeesManagement/
 }
 ```
 
-**Option 3: Azure SQL Database**
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=tcp:your-server.database.windows.net,1433;Initial Catalog=EmployeeDB;Persist Security Info=False;User ID=username;Password=password;MultipleActiveResultSets=False;Encrypt=True;Connection Timeout=30;"
-  }
-}
-```
 
-### User Secrets (Recommended for Development)
-
-```bash
-# Initialize secrets
-dotnet user-secrets init
-
-# Set connection string
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "your-connection-string"
-
-# List all secrets
-dotnet user-secrets list
-```
 
 ## 📊 Database Migrations
 
